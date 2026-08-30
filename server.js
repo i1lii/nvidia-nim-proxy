@@ -23,52 +23,13 @@ const ENABLE_THINKING_MODE = process.env.ENABLE_THINKING_MODE === 'true' || true
 
 // 🎯 MODEL MAPPING — verified against build.nvidia.com/models (July 2025)
 const MODEL_MAPPING = {
-  // --- DeepSeek (confirmed live on NIM) ---
-  'deepseek-v4-pro':   'deepseek-ai/deepseek-v4-pro',    // 1M ctx, flagship MoE
-  'deepseek-v4-flash': 'deepseek-ai/deepseek-v4-flash',  // 1M ctx, fast 284B MoE
-  'gpt-4':             'deepseek-ai/deepseek-v4-pro',
-  'gpt-4o':            'deepseek-ai/deepseek-v4-flash',
-
-  // --- NVIDIA Nemotron ---
-  'gpt-3.5-turbo':  'nvidia/nemotron-3-ultra-550b-a55b',  // New! 550B hybrid MoE, 1M ctx
-  'gpt-4o-mini':    'nvidia/nemotron-3-super-120b-a12b',
-
-  // --- Qwen ---
-  'gpt-4-faster':  'qwen/qwen3.5-122b-a10b',
-
-  // --- Mistral (free endpoints) ---
-  'mistral-medium':  'mistralai/mistral-medium-3.5-128b',
-  'mistral-small':   'mistralai/mistral-small-4-119b-2603',
-  'gemini-pro':      'mistralai/mistral-medium-3.5-128b',
-
-  // --- GLM (Z.ai, free endpoint) ---
-  'glm-pro':    'z-ai/glm-5.2',   // New! Flagship agentic LLM, replaces 5.1 & 4.7
-
-  // --- MiniMax (free endpoint) ---
-  'minimax':    'minimaxai/minimax-m3',   // New! Replaces m2.7, multimodal MoE
-
-  // --- Kimi (Moonshot AI) ---
-  'kimi':       'moonshotai/kimi-k3',  // New! 1T MoE, long-horizon, tool use
-
-  // --- Step (StepFun AI, free endpoint) ---
-  'step-flash': 'stepfun-ai/step-3.7-flash',  // New! Sparse MoE, fast reasoning
-
-  // --- Google ---
-  'gemma':      'google/gemma-4-31b-it',
-
-  // --- OpenAI OSS (via NIM) ---
-  'claude-3-opus':   'openai/gpt-oss-120b',
-  'claude-3-sonnet': 'openai/gpt-oss-20b',
+ 'moonshotai/kimi-k3',
 };
 
 // 🔄 FALLBACK CHAIN - When primary model hits 429, try these in order
 const FALLBACK_CHAIN = [
   'deepseek-ai/deepseek-v4-flash',
-  'mistralai/mistral-medium-3.5-128b',
-  'mistralai/mistral-small-4-119b-2603',
-  'z-ai/glm-5.2',
-  'minimaxai/minimax-m3',
-  'stepfun-ai/step-3.7-flash',
+
 ];
 
 // 🛡️ ROLEPLAY GUARD - Injected into every request to prevent the model from speaking as the user
@@ -122,17 +83,7 @@ function stripUserBreakout(text) {
 
 // 🎨 THINKING-CAPABLE MODELS
 const THINKING_MODELS = [
-  'deepseek-ai/deepseek-v4-pro',
-  'deepseek-ai/deepseek-v4-flash',
-  'nvidia/nemotron-3-ultra-550b-a55b',
-  'nvidia/nemotron-3-super-120b-a12b',
-  'qwen/qwen3.5-122b-a10b',
-  'mistralai/mistral-medium-3.5-128b',
-  'mistralai/mistral-small-4-119b-2603',
-  'z-ai/glm-5.2',
-  'minimaxai/minimax-m3',
   'moonshotai/kimi-k3',
-  'stepfun-ai/step-3.7-flash',
 ];
 
 // 🔄 Helper: make a NIM request with automatic 429 fallback
@@ -200,9 +151,9 @@ app.get('/', (req, res) => {
       chat: '/v1/chat/completions'
     },
     featured_models: {
-      best_quality: 'gpt-4 → deepseek-v4-pro (1M ctx)',
-      balanced: 'gpt-4o → deepseek-v4-flash (fast MoE)',
-      free_flagship: 'glm-pro → glm-5.2 (latest Z.ai)',
+      best_quality: 'moonshotai/kimi-k3' ('1M ctx) 
+     balanced: 'moonshotai/kimi-k3' ('fast MoE)',
+      free_flagship: 'moonshotai/kimi-k3' ('latest Z.ai)',
       newest: 'kimi → kimi-k3 (1T MoE)'
     }
   });
@@ -266,11 +217,11 @@ app.post('/v1/chat/completions', async (req, res) => {
       if (!nimModel) {
         const modelLower = model.toLowerCase();
         if (modelLower.includes('gpt-4') || modelLower.includes('opus') || modelLower.includes('405b')) {
-          nimModel = 'deepseek-ai/deepseek-v4-pro';
+          nimModel = 'moonshotai/kimi-k3';
         } else if (modelLower.includes('claude') || modelLower.includes('gemini') || modelLower.includes('70b')) {
-          nimModel = 'deepseek-ai/deepseek-v4-flash';
+          nimModel = 'moonshotai/kimi-k3';
         } else {
-          nimModel = 'mistralai/mistral-medium-3.5-128b';
+          nimModel = 'moonshotai/kimi-k3',
         }
       }
     }
@@ -489,11 +440,11 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   • 429 fallback chain: ${FALLBACK_CHAIN.length} models`);
   console.log('');
   console.log('🎯 Featured Models:');
-  console.log('   • Best Quality : gpt-4       → DeepSeek V4 Pro (1M ctx)');
-  console.log('   • Balanced     : gpt-4o      → DeepSeek V4 Flash (fast MoE)');
-  console.log('   • Free Latest  : glm-pro     → GLM-5.2 (Z.ai flagship)');
+  console.log('   • Best Quality : Kimi      → moonshotai/kimi-k3', ('1M ctx)');
+  console.log('   • Balanced     : Kimi     → moonshotai/kimi-k3', ('fast MoE)');
+  console.log('   • Free Latest  : Kimi     → moonshotai/kimi-k3',');
   console.log('   • Newest       : kimi        → Kimi-k3 (1T MoE)');
-  console.log('   • Fast Free    : step-flash  → Step-3.7 Flash');
+  console.log('   • Fast Free    : Kimi
   console.log('🔄 Fallback Chain (on 429):');
   FALLBACK_CHAIN.forEach((m, i) => console.log(`   ${i + 1}. ${m}`));
   console.log('═══════════════════════════════════════════════════════');
