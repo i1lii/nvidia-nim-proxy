@@ -23,7 +23,6 @@ const ENABLE_THINKING_MODE = process.env.ENABLE_THINKING_MODE === 'true' || true
 
 // 🎯 MODEL MAPPING — verified against build.nvidia.com/models (July 2025)
 const MODEL_MAPPING = {
-  
   // --- Kimi (Moonshot AI) ---
   'kimi-k3': 'moonshotai/kimi-k3',
   'moonshotai/kimi-k3': 'moonshotai/kimi-k3', 
@@ -31,7 +30,6 @@ const MODEL_MAPPING = {
 
 // 🔄 FALLBACK CHAIN - When primary model hits 429, try these in order
 const FALLBACK_CHAIN = [
-  'deepseek-ai/deepseek-v4-flash',
   'Kimi-K3',
 ];
 
