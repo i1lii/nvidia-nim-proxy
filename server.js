@@ -24,8 +24,7 @@ const ENABLE_THINKING_MODE = process.env.ENABLE_THINKING_MODE === 'true' || true
 // 🎯 MODEL MAPPING — verified against build.nvidia.com/models (July 2025)
 const MODEL_MAPPING = {
   // --- Kimi (Moonshot AI) ---
-  'kimi-k3': 'moonshotai/kimi-k3',
-  'moonshotai/kimi-k3': 'moonshotai/kimi-k3', 
+  'kimi-k3',
 };
 
 // 🔄 FALLBACK CHAIN - When primary model hits 429, try these in order
@@ -84,17 +83,7 @@ function stripUserBreakout(text) {
 
 // 🎨 THINKING-CAPABLE MODELS
 const THINKING_MODELS = [
-  'deepseek-ai/deepseek-v4-pro',
-  'deepseek-ai/deepseek-v4-flash',
-  'nvidia/nemotron-3-ultra-550b-a55b',
-  'nvidia/nemotron-3-super-120b-a12b',
-  'qwen/qwen3.5-122b-a10b',
-  'mistralai/mistral-medium-3.5-128b',
-  'mistralai/mistral-small-4-119b-2603',
-  'z-ai/glm-5.2',
-  'minimaxai/minimax-m3',
-  'moonshotai/kimi-k2.6',
-  'stepfun-ai/step-3.7-flash',
+    'kimi-k3',
 ];
 
 // 🔄 Helper: make a NIM request with automatic 429 fallback
@@ -162,10 +151,10 @@ app.get('/', (req, res) => {
       chat: '/v1/chat/completions'
     },
     featured_models: {
-      best_quality: 'gpt-4 → deepseek-v4-pro (1M ctx)',
-      balanced: 'gpt-4o → deepseek-v4-flash (fast MoE)',
-      free_flagship: 'glm-pro → glm-5.2 (latest Z.ai)',
-      newest: 'kimi → kimi-k2.6 (1T MoE)'
+      best_quality: '  'kimi-k3',
+      balanced: '  'kimi-k3',
+      free_flagship: '  'kimi-k3',
+      newest: 'kimi →   'kimi-k3', (1T MoE)'
     }
   });
 });
