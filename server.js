@@ -48,7 +48,8 @@ const MODEL_MAPPING = {
   'minimax':    'minimaxai/minimax-m3',   // New! Replaces m2.7, multimodal MoE
 
   // --- Kimi (Moonshot AI) ---
-  'kimi':       'moonshotai/kimi-k2.6',  // New! 1T MoE, long-horizon, tool use
+  'kimi-k3': 'moonshotai/kimi-k3',
+  'moonshotai/kimi-k3': 'moonshotai/kimi-k3',  // New! 1T MoE, long-horizon, tool use
 
   // --- Step (StepFun AI, free endpoint) ---
   'step-flash': 'stepfun-ai/step-3.7-flash',  // New! Sparse MoE, fast reasoning
